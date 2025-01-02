@@ -38,11 +38,12 @@ CREATE TABLE IF NOT EXISTS `socio` (
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 CREATE TABLE IF NOT EXISTS `entrenamiento` (
-    `idEntrenamiento` int(11) NOT NULL auto_increment,
+
     `tipoEntrenamiento` VARCHAR(20),
     `ubicacion` varchar(25),
     `fechaRealizacion` date,
     `socioID` int(11) not null,
+    `idEntrenamiento` int(11) NOT NULL auto_increment,
     PRIMARY KEY (`idEntrenamiento`),
     FOREIGN KEY (`socioID`) REFERENCES `socio`(`socioID`)
 )  ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;

@@ -48,8 +48,8 @@
         if(fechaRealizacion != null || !fechaRealizacion.isEmpty()){
             flagValidaFecha = true;
         }
-        idUsuario = request.getParameter("idUsuario");
-        if(idUsuario != null || !idUsuario.isEmpty() || !idUsuario.isBlank()){
+        socioID = request.getParameter("idUsuario");
+        if(socioID != null){
             flagValidaIdUsuario = true;
         }
 
@@ -76,25 +76,23 @@
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/baloncesto", "root", "secret");
 
+
             String sql = "INSERT INTO entrenamiento VALUES ( " +
                     "?, " +
                     "?, " +
                     "?, " +
                     "?)";
 
-
-
                 ps = conn.prepareStatement(sql);
-
 
             int idx = 1;
             ps.setString(idx++, tipoEntrenamiento);
             ps.setString(idx++, ubicacion);
             ps.setString(idx++, fechaRealizacion);
-            ps.setString(idx++, idUsuario);
+            ps.setInt(idx++, Integer.parseInt(socioID));
 
-            int filasAfectadas = ps.executeUpdate();
-            System.out.println(" <h2>Entrenamientos Creados:  " + filasAfectadas +  "</h2>");
+           out.println("<h2> se ha introducido el usuario </h2>");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -103,6 +101,7 @@
     }
 %>
 
-
+<a href="index.jsp">Volver al principio</a>
+<a href="listarEntrenamientos.jsp">Listamos los entrenamientos</a>
 </body>
 </html>
