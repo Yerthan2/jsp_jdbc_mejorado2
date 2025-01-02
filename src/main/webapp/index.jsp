@@ -17,7 +17,8 @@
 <a href="pideNumeroSocio.jsp">Pide de Socios</a>
 <br>
 <a href="mostrarInfoUsuario.jsp">Mostrar info de un usuario</a>
-<a href="crearEntrenamiento">Crear Entrenamiento</a>
+<br>
+<a href="formularioEntrenamiento.jsp">Crear Entrenamiento</a>
 
 <form action="detalleSocio.jsp">
     Cargar socio con ID:

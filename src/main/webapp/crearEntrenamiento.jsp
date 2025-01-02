@@ -1,8 +1,13 @@
-<%--
+<%@ page import="java.util.Objects" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.PreparedStatement" %>
+<%@ page import="java.sql.DriverManager" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.sql.SQLException" %><%--
   Created by IntelliJ IDEA.
   User: 34691
-  Date: 30/12/2024
-  Time: 19:55
+  Date: 01/01/2025
+  Time: 19:13
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -11,7 +16,93 @@
     <title>Crear Entrenamiento</title>
 </head>
 <body>
-<h1>Esto sirve para crear los entrenamientos</h1>
+
+<%
+    //CÓDIGO DE VALIDACIÓN
+    boolean valida = true;
+    int idEntranamiento = -1;
+    String tipoEntrenamiento = null;
+    String ubicacion = null;
+    String fechaRealizacion = null;
+    String socioID = null;
+
+
+    boolean flagValidaEntrenamiento = false;
+    boolean flagValidatipoEntrenamiento = false;
+    boolean flagValidaUbicacion = false;
+    boolean flagValidaFecha = false;
+    boolean flagValidaIdEntrenamiento = false;
+    boolean flagValidaIdUsuario = false;
+
+    try {
+
+        tipoEntrenamiento = request.getParameter("tipoEntrenamiento");
+        if(tipoEntrenamiento != null || tipoEntrenamiento.equalsIgnoreCase("tecnico") || tipoEntrenamiento.equalsIgnoreCase("fisico")){
+            flagValidatipoEntrenamiento = true;
+        }
+        ubicacion = request.getParameter("ubicacion");
+        if(ubicacion != null){
+            flagValidatipoEntrenamiento = true;
+        }
+        fechaRealizacion =request.getParameter("fecha");
+        if(fechaRealizacion != null || !fechaRealizacion.isEmpty()){
+            flagValidaFecha = true;
+        }
+        idUsuario = request.getParameter("idUsuario");
+        if(idUsuario != null || !idUsuario.isEmpty() || !idUsuario.isBlank()){
+            flagValidaIdUsuario = true;
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+
+        if (!flagValidatipoEntrenamiento) {
+            session.setAttribute("error", "Error en el tipo.");
+        } else if (!flagValidaFecha) {
+            session.setAttribute("error", "Error en la fecha.");
+        } else if(!flagValidaUbicacion){
+            session.setAttribute("error", "Error en la ubicacion");
+        }
+
+        valida = false;
+
+    }
+
+    if(valida){
+        try{
+            Connection conn = null;
+            PreparedStatement ps = null;
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/baloncesto", "root", "secret");
+
+            String sql = "INSERT INTO entrenamiento VALUES ( " +
+                    "?, " +
+                    "?, " +
+                    "?, " +
+                    "?)";
+
+
+
+                ps = conn.prepareStatement(sql);
+
+
+            int idx = 1;
+            ps.setString(idx++, tipoEntrenamiento);
+            ps.setString(idx++, ubicacion);
+            ps.setString(idx++, fechaRealizacion);
+            ps.setString(idx++, idUsuario);
+
+            int filasAfectadas = ps.executeUpdate();
+            System.out.println(" <h2>Entrenamientos Creados:  " + filasAfectadas +  "</h2>");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+%>
+
 
 </body>
 </html>
