@@ -1,9 +1,6 @@
 <%@ page import="java.util.Objects" %>
-<%@ page import="java.sql.Connection" %>
-<%@ page import="java.sql.PreparedStatement" %>
-<%@ page import="java.sql.DriverManager" %>
 <%@ page import="java.util.Date" %>
-<%@ page import="java.sql.SQLException" %><%--
+<%@ page import="java.sql.*" %><%--
   Created by IntelliJ IDEA.
   User: 34691
   Date: 01/01/2025
@@ -33,6 +30,7 @@
     boolean flagValidaFecha = false;
     boolean flagValidaIdEntrenamiento = false;
     boolean flagValidaIdUsuario = false;
+    boolean existeUsuarioID = false;
 
     try {
 
@@ -76,23 +74,32 @@
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/baloncesto", "root", "secret");
 
+            Statement s = conn.createStatement();
+            ResultSet listado = s.executeQuery ("SELECT * FROM socio");
 
-            String sql = "INSERT INTO entrenamiento VALUES ( " +
-                    "?, " +
-                    "?, " +
-                    "?, " +
-                    "?)";
+            while(listado.next()){
+                existeUsuarioID = listado.getString(1).equalsIgnoreCase(socioID);
+            }
+            if(existeUsuarioID != true){
+                System.out.println("No existe el usuario");
+            }else {
+
+                String sql = "INSERT INTO entrenamiento VALUES ( " +
+                        "?, " +
+                        "?, " +
+                        "?, " +
+                        "?)";
 
                 ps = conn.prepareStatement(sql);
 
-            int idx = 1;
-            ps.setString(idx++, tipoEntrenamiento);
-            ps.setString(idx++, ubicacion);
-            ps.setString(idx++, fechaRealizacion);
-            ps.setInt(idx++, Integer.parseInt(socioID));
+                int idx = 1;
+                ps.setString(idx++, tipoEntrenamiento);
+                ps.setString(idx++, ubicacion);
+                ps.setString(idx++, fechaRealizacion);
+                ps.setInt(idx++, Integer.parseInt(socioID));
 
-           out.println("<h2> se ha introducido el usuario </h2>");
-
+                out.println("<h2> se ha introducido el usuario </h2>");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
